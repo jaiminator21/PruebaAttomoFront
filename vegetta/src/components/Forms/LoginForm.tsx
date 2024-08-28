@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
+import { API } from '@/lib/services/api'
+import { JWT_DECODER } from '@/lib/services/jwtDecoder'
+
+import { jwtDecode } from "jwt-decode";
+
 
 import {
   CardTitle,
@@ -18,11 +23,34 @@ import { Input } from "@/components/ui/input";
 
 export function SigninForm() {
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
 
-    
+
+    const data = {
+      email: e.target[0].value,
+      password: e.target[1].value
+    }
+
+
+    API.post('users/login', data).then(response => {
+      //console.log(response);
+
+      if (response.status !== 200) {
+        console.log("error en el login");
+        return false;
+      }
+      localStorage.setItem('Token', response.data.token)
+
+      JWT_DECODER();
+
+    });
+  }
+
+
   return (
     <div className="w-full max-w-md">
-      <form>
+      <form onSubmit={handleSubmit}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign In</CardTitle>
@@ -34,10 +62,10 @@ export function SigninForm() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="identifier"
-                name="identifier"
+                id="email"
+                name="email"
                 type="text"
-                placeholder="username or email"
+                placeholder="email"
               />
             </div>
             <div className="space-y-2">
@@ -51,7 +79,7 @@ export function SigninForm() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <button className="w-full">Sign In</button>
+            <button className="w-full" type="submit">Sign In</button>
           </CardFooter>
         </Card>
         <div className="mt-4 text-center text-sm">

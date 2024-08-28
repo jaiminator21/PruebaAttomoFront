@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useFormState } from "react-dom";
 import { registerUserAction } from "@/lib/auth-actions";
+import {API} from '@/lib/services/api'
 
 import {
   CardTitle,
@@ -26,10 +27,27 @@ export function SignupForm() {
     registerUserAction,
     INITIAL_STATE
   );
+
+  const HandleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(e);
+    
+    const data = {
+      username: e.target[4].value,
+      email: e.target[5].value,
+      password: e.target[6].value
+    }
+    console.log("Esto es data",data)
+    API.post('users/register', data).then(response => console.log(response));
+    
+  }
+
+
+
   console.log(formState);
   return (
     <div className="w-full max-w-md">
-      <form action={formAction}>
+      <form action={formAction} onSubmit={HandleSubmit}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign Up</CardTitle>
@@ -71,12 +89,12 @@ export function SignupForm() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <button className="w-full">Sign Up</button>
+            <button className="w-full" type="submit">Sign Up</button>
           </CardFooter>
         </Card>
         <div className="mt-4 text-center text-sm">
           Have an account?
-          <Link className="underline ml-2" href="signin">
+          <Link className="underline ml-2" href="login">
             Sing In
           </Link>
         </div>
