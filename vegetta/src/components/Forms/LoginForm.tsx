@@ -24,37 +24,23 @@ import { Input } from "@/components/ui/input";
 
 export function SigninForm() {
 
-  const [patata, setToken] = useState(null)
+  
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
+console.log(e);
 
     const data = {
       email: e.target[0].value,
       password: e.target[1].value
     }
-
-
     API.post('users/login', data).then(response => {
-      //console.log(response);
-
-
-      console.log("Valor de patata",patata);
-      
-
       if (response.status !== 200) {
         console.log("error en el login");
         return false;
       }
-      setToken(response.data.token)
-
       localStorage.setItem('Token', response.data.token)
-
-      console.log("Valor de patata",patata);
-      
-      JWT_DECODER();
-
     });
   }
 
