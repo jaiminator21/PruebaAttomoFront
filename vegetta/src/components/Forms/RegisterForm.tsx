@@ -23,19 +23,16 @@ const INITIAL_STATE = {
 };
 
 export function SignupForm() {
-  const [formState, formAction] = useFormState(
-    registerUserAction,
-    INITIAL_STATE
-  );
+
 
   const HandleSubmit = (e: any) => {
     e.preventDefault();
     console.log(e);
     
     const data = {
-      username: e.target[4].value,
-      email: e.target[5].value,
-      password: e.target[6].value
+      username: e.target[0].value,
+      email: e.target[1].value,
+      password: e.target[2].value
     }
     console.log("Esto es data",data)
     API.post('users/register', data).then(response => console.log(response));
@@ -44,10 +41,10 @@ export function SignupForm() {
 
 
 
-  console.log(formState);
+
   return (
     <div className="w-full max-w-md">
-      <form action={formAction} onSubmit={HandleSubmit}>
+      <form  onSubmit={HandleSubmit}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign Up</CardTitle>
@@ -64,7 +61,7 @@ export function SignupForm() {
                 type="text"
                 placeholder="username"
               />
-              <ZodErrors error={formState?.zodErrors?.username} />
+              
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -74,7 +71,7 @@ export function SignupForm() {
                 type="email"
                 placeholder="name@example.com"
               />
-              <ZodErrors error={formState?.zodErrors?.email} />
+            
             </div>
 
             <div className="space-y-2">
@@ -85,7 +82,7 @@ export function SignupForm() {
                 type="password"
                 placeholder="password"
               />
-              <ZodErrors error={formState?.zodErrors?.password} />
+ 
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">

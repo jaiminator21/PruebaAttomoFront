@@ -9,56 +9,158 @@ import {
     CardFooter,
     Card,
 } from "@/components/ui/card";
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+
 import { FaHeart } from "react-icons/fa";
 import { Separator, } from "@/components/ui/separator";
 
 import Link from "next/link";
 import { API } from "@/lib/services/api";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { validateHeaderName } from "http";
+import { jwtDecode } from "jwt-decode";
+import { Button } from "@/components/ui/button"
 export function GameList({ game }: { game: any }) {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [votesArray, setVotesArray] = useState<any[]>([]);
 
-    const sendVote = async () => {
-        const token: any = localStorage.getItem('Token')
+    useEffect(() => {
+        validateToken();
+    }, []);
+
+    const validateToken = async () => {
+        const token = localStorage.getItem('Token');
         if (token == null) {
             console.log('Token Vacio');
-            setIsAuthenticated(false)
+            setIsAuthenticated(false);
             return false;
         }
         try {
             const res = await API.get('users/checksession', {
                 headers: {
-                    Authorization: `Bearer ${token}`,  // Asegúrate de que el token esté correctamente formateado
+                    Authorization: `Bearer ${token}`,
                 },
             });
             console.log('Respuesta:', res.data);
-            setIsAuthenticated(true)
-            console.log(isAuthenticated);
+    
+            setIsAuthenticated(true);
+            setVotesArray(res.data.votes);
+    
 
+/*             setVotesArray((updatedVotesArray) => {return updatedVotesArray;});*/
         } catch (error) {
             console.error('Error en la petición:', error);
-            setIsAuthenticated(false)
+            setIsAuthenticated(false);
             return false;
         }
+    }
 
+    const checkVotes = (gameId: any) => {
+        console.log("Comprobando duplicados de", gameId);
+    
+        if (!votesArray.includes(gameId)) {
+            console.log("Continuando con el proceso");
+    
+            // Actualización del estado con el nuevo array que incluye el nuevo gameId
+            setVotesArray(prevVotesArray => [...prevVotesArray, gameId]);
+    
+            // Llamada a la función sendVote (suponiendo que esta función maneja el envío del voto)
+            sendVote();
+        } else {
+            console.log(votesArray);
+            console.log("No se puede votar", votesArray.length);
+            return false;
+        }
+    };
+    
+    
+    const sendVote = () => {
+        const newVote = game.votes + 1;
+        const url = 'games/' + game._id;
+    
+        try {
+            API.put(url, {
+                votes: newVote,
+            }).then((res) => {
+                console.log("Voto enviado!", votesArray.length);
+                registerVote();
+            });
+        } catch (error) {
+            console.log(error);   
+        }
+    }
+    
+    
+    const removeVote = () => {
+        const newVote = game.votes -1;
+        const url = 'games/' + game._id;
+    
+        try {
+            API.put(url, {
+                votes: newVote,
+            }).then((res) => {
+                console.log("Voto cancelado!", votesArray.length);
+            });
+        } catch (error) {
+            console.log(error);   
+        }
+    }
+    
 
-
-        if (isAuthenticated === true) {
-            console.log("mandandoVoto");
-            const newVote :number=  game.votes+1
+    const registerVote = () => {
+        const token: any = localStorage.getItem("Token");
+        if (!token) return false;
+        const decoded: any = jwtDecode(token);
+        const url = `users/${decoded.id}`;
+        try {
+          // Verifica que votesArray contenga los datos correctos
+  
+          console.log("Payload enviado:", votesArray);
       
-            const url:string = 'games'+game.id
-
-            API.put(url).then((res)=>{
-
+          API.put(url, { votes: votesArray })
+            .then((res) => {
+              console.log("Respuesta de la API:", res);
             })
-            
+            .catch((error) => {
+              console.error("Error al enviar la petición:", error);
+            });
+        } catch (error) {
+          console.error("Error en la lógica:", error);
+        }
+      };
+
+      const cancelVote = () => {
+        if (isAuthenticated === true) {
+            console.log("Puedes Votar");
+            removeVote();
+        } else {
+            return false
         }
 
     }
-    console.log(game); // Verifica que el objeto `game` se esté recibiendo correctamente
+
+    const submitVote = () => {
+        if (isAuthenticated === true) {
+            console.log("Puedes Votar");
+            checkVotes(game._id);
+        } else {
+            return false
+        }
+
+    }
 
     return (
         <>
@@ -88,13 +190,31 @@ export function GameList({ game }: { game: any }) {
                         </div>
                     </Link>
                     <Separator orientation="vertical" />
-                    <div className="flex flex-col justify-center items-center" onClick={sendVote}>
-                        <span><FaHeart /></span>
+                    <div className="flex flex-col justify-center items-center" >
+                        <AlertDialog >
+                            <AlertDialogTrigger asChild>
+                                <Button variant="outline" onClick={submitVote}>Votar</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Seguro que quieres votar a {game.name}?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete your
+                                        account and remove your data from our servers.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel onClick={cancelVote}>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction onClick={registerVote}>Confirmar</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                         <span>{game.votes}</span>
                     </div>
                     <p> </p>
-
                 </Card>
+
+
 
             </div >
         </>

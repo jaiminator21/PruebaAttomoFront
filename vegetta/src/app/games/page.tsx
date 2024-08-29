@@ -16,7 +16,7 @@ export default function Home() {
     const getGames = async () => {
         try {
             const res = await API.get('games');
-            console.log(res);
+            //console.log(res);
 
             if (res.data.length > 0) {
                 // Almacenar los datos en el estado

@@ -35,6 +35,8 @@ export default function Game({ searchParams }: {
     return (
         <>
                 <NavBar />
+
+               
         </>
     );
 }
