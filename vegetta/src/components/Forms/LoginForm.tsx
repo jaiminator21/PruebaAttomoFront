@@ -5,6 +5,7 @@ import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import { API } from '@/lib/services/api'
 import { JWT_DECODER } from '@/lib/services/jwtDecoder'
+import { useState } from "react";
 
 import { jwtDecode } from "jwt-decode";
 
@@ -23,6 +24,8 @@ import { Input } from "@/components/ui/input";
 
 export function SigninForm() {
 
+  const [patata, setToken] = useState(null)
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
@@ -36,12 +39,20 @@ export function SigninForm() {
     API.post('users/login', data).then(response => {
       //console.log(response);
 
+
+      console.log("Valor de patata",patata);
+      
+
       if (response.status !== 200) {
         console.log("error en el login");
         return false;
       }
+      setToken(response.data.token)
+
       localStorage.setItem('Token', response.data.token)
 
+      console.log("Valor de patata",patata);
+      
       JWT_DECODER();
 
     });

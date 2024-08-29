@@ -15,7 +15,7 @@ const navbar = () => {
 
     return (
         <nav className="fixed w-full h-24 shadow-xl bg-white">
-            <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16">
+            <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16 ">
                 <Link href={"/"}>
                     <Image
                         src={logo}
@@ -29,13 +29,13 @@ const navbar = () => {
                 <div className="hidden md:flex">
                     <ul className="hidden md:flex">
                         <Link href={"/games"}>
-                            <li className="ml-10 uppercase hover:border-b text-xl">Ver juegos</li>
-                        </Link>
-                        <Link href={"/login"}>
-                            <li className="ml-10 uppercase hover:border-b text-xl">Iniciar sesión</li>
+                            <li className="ml-10 uppercase hover:border-b text-xl">Vota ya</li>
                         </Link>
                         <Link href={"/edit"}>
                             <li className="ml-10 uppercase hover:border-b text-xl">Editar juegos</li>
+                        </Link>
+                        <Link href={"/login"}>
+                            <li className="ml-10 uppercase hover:border-b text-xl">Iniciar sesión</li>
                         </Link>
                     </ul>
                 </div>
