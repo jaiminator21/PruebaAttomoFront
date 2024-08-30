@@ -53,7 +53,7 @@ export default function Edit() {
         } catch (error) {
             console.error('Error en la validación del token:', error);
             setIsAuthenticated(false);
-            console.log("FUERA");
+            console.log("FUERA", isAuthenticated);
             router.push('/login');
         }
     };
@@ -69,7 +69,7 @@ export default function Edit() {
                 </div>
 
                 <Link href={'/creategame'}>
-                    <Button>Button</Button>
+                    <Button>Post game</Button>
                 </Link>
                 
 
