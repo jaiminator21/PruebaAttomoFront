@@ -193,14 +193,13 @@ export function GameList({ game }: { game: any }) {
                     <div className="flex flex-col justify-center items-center" >
                         <AlertDialog >
                             <AlertDialogTrigger asChild>
-                                <Button variant="outline" onClick={submitVote}>Votar</Button>
+                                <Button variant="outline" onClick={submitVote}>Vote</Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Seguro que quieres votar a {game.name}?</AlertDialogTitle>
+                                    <AlertDialogTitle>Are you shure you want give your vote to {game.name}?</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete your
-                                        account and remove your data from our servers.
+                                        This action cannot be undone.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>

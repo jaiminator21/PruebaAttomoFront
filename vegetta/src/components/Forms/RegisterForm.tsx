@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useFormState } from "react-dom";
-import { registerUserAction } from "@/lib/auth-actions";
-import {API} from '@/lib/services/api'
 import { useRouter } from 'next/navigation';
+import { API } from '@/lib/services/api';
 import {
   CardTitle,
   CardDescription,
@@ -13,31 +11,50 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { ZodErrors } from "@/components/ZodErrors";
-
 
 export function SignupForm() {
+  const router = useRouter();
 
-  const router = useRouter()
+  const validateEmail = (email: string) => {
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    return regex.test(String(email).toLocaleLowerCase());
+  };
+
+  const validatePassword = (password: string) => {
+    const regex =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    return regex.test(String(password));
+  };
+
   const HandleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(e);
-    
+
     const data = {
       username: e.target[0].value,
       email: e.target[1].value,
-      password: e.target[2].value
+      password: e.target[2].value,
+    };
+
+    if (!validateEmail(data.email)) {
+      alert("Please enter a valid email address.");
+      return;
     }
-    console.log("Esto es data",data)
-    API.post('users/register', data).then(response =>router.push('/login'));
-  }
+
+    if (!validatePassword(data.password)) {
+      alert(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character."
+      );
+      return;
+    }
+
+    API.post('users/register', data).then(() => router.push('/login'));
+  };
 
   return (
     <div className="w-full max-w-md">
-      <form  onSubmit={HandleSubmit}>
+      <form onSubmit={HandleSubmit}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign Up</CardTitle>
@@ -54,7 +71,6 @@ export function SignupForm() {
                 type="text"
                 placeholder="username"
               />
-              
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -64,9 +80,7 @@ export function SignupForm() {
                 type="email"
                 placeholder="name@example.com"
               />
-            
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -75,7 +89,6 @@ export function SignupForm() {
                 type="password"
                 placeholder="Contraseñ: Ejemplo123!"
               />
- 
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
@@ -85,7 +98,7 @@ export function SignupForm() {
         <div className="mt-4 text-center text-sm">
           Have an account?
           <Link className="underline ml-2" href="login">
-            Sing In
+            Sign In
           </Link>
         </div>
       </form>

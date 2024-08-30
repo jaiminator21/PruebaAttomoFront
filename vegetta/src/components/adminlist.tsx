@@ -176,19 +176,20 @@ export function AdminList({ game }: { game: any }) {
                 </div>
                 <div className="flex gap-4">
                     {isEditing ? (
-                        <Button onClick={FinishEdit}>Guardar</Button>
+                        <Button onClick={FinishEdit}>Save</Button>
                     ) : (
-                        <Button onClick={StartEdit}>Editar</Button>
+                        <Button onClick={StartEdit}>Edit</Button>
                     )}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="outline">Votar</Button>
+                            <Button variant="outline">Delete</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>¿Seguro que quieres votar a {game.name}?</AlertDialogTitle>
+                                <AlertDialogTitle>¿Are you shure want to delete {game.name}?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Esta acción no se puede deshacer. Esto votará por este juego.
+                                This action cannot be undone. This will permanently delete your
+                                account and remove your data from our servers.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

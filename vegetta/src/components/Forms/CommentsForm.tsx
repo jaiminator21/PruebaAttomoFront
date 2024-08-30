@@ -142,7 +142,7 @@ export function CommentForm({ GameId, Game }: { GameId: string, Game: GameObject
             <form onSubmit={handleSubmit}>
                 <Card>
                     <CardHeader className="space-y-1">
-                        <CardTitle className="text-3xl font-bold">Dejanos tu opinión</CardTitle>
+                        <CardTitle className="text-3xl font-bold">Leave us your opinion</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">

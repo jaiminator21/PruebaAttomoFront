@@ -65,7 +65,7 @@ export default function Edit() {
             <NavBar />
             <main className="flex flex-col items-center  min-h-screen bg-gray-100 dark:bg-gray-900 gap-20">
                 <div className="m-32">
-                    <h1>Bienvenido al panel de admistrador</h1>
+                    <h1>Wellcome to the admin pannel</h1>
                 </div>
 
                 <Link href={'/creategame'}>

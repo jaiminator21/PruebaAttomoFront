@@ -46,15 +46,15 @@ const Navbar = () => {
                 <div className="hidden md:flex">
                     <ul className="hidden md:flex">
                         <Link href={"/games"}>
-                            <li className="ml-10 uppercase hover:border-b text-xl">Vota ya</li>
+                            <li className="ml-10 uppercase hover:border-b text-xl">Vote now</li>
                         </Link>
                         {admin && (
                             <Link href={"/edit"}>
-                                <li className="ml-10 uppercase hover:border-b text-xl">Editar juegos</li>
+                                <li className="ml-10 uppercase hover:border-b text-xl">Admin pannel</li>
                             </Link>
                         )}
                         <Link href={"/login"}>
-                            <li className="ml-10 uppercase hover:border-b text-xl">Iniciar sesión</li>
+                            <li className="ml-10 uppercase hover:border-b text-xl">SignIn</li>
                         </Link>
                     </ul>
                 </div>
