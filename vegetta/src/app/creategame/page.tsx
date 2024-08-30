@@ -21,9 +21,9 @@ import { Input } from "@/components/ui/input";
 
 export default function CreateGame() {
 
-    useEffect(()=>{
-      //  checkAdmin();
-    },[])
+    useEffect(() => {
+        checkAdmin();
+    }, [])
 
     const router = useRouter();
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -51,33 +51,33 @@ export default function CreateGame() {
 
     const sendGame = async (formData: FormData) => {
         try {
-          const res = await API.post("/games", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data", // Asegúrate de especificar que el contenido es multipart/form-data
-            },
-          });
-          console.log(res);
+            const res = await API.post("/games", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data", // Asegúrate de especificar que el contenido es multipart/form-data
+                },
+            });
+            console.log(res);
         } catch (error) {
-          console.error("Error al crear el juego:", error);
+            console.error("Error al crear el juego:", error);
         }
-      };
-    
-      const handleSubmit = async (e: any) => {
+    };
+
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-    
+
         // Crear un FormData y agregar los campos del formulario
         const formData = new FormData();
         formData.append("name", e.target[0].value);
         formData.append("genre", e.target[1].value);
-    
+
         // Asegurarse de que el archivo sea agregado correctamente
         if (e.target[2].files.length > 0) {
-          formData.append("cover", e.target[2].files[0]);
+            formData.append("cover", e.target[2].files[0]);
         }
-    
+
         // Enviar el FormData
         await sendGame(formData);
-      };
+    };
 
     return (
         <>

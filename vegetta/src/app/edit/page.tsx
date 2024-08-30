@@ -11,7 +11,7 @@ import Link from 'next/link'
 export default function Edit() {
     const router = useRouter();
     useEffect(()=>{
-        //checkAdmin();
+        checkAdmin();
         getGames();
     },[])
 
@@ -76,7 +76,7 @@ export default function Edit() {
                 <div >
                         {gamesArray.length > 0 ? (
                             gamesArray.map((game, index) => (
-                                <div className="gap-10">
+                                <div key = {index}  className="gap-10">
                                     <AdminList key = {index} game = {game}/>
                                 </div>
                             ))

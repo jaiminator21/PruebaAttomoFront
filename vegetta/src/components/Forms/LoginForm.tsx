@@ -27,7 +27,7 @@ export function SigninForm() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-console.log(e);
+    console.log(e);
 
     const data = {
       email: e.target[0].value,
@@ -39,7 +39,7 @@ console.log(e);
         return false;
       }
 
-      
+
       localStorage.setItem('Token', response.data.token)
       localStorage.setItem('Rol', response.data.user.role)
 
@@ -83,11 +83,12 @@ console.log(e);
           </CardFooter>
         </Card>
         <div className="mt-4 text-center text-sm">
-          Don't have an account?
+          Don&apos;t have an account?
           <Link className="underline ml-2" href="register">
             Sign Up
           </Link>
         </div>
+
       </form>
     </div>
   );

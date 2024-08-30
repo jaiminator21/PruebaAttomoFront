@@ -10,9 +10,8 @@ import { json } from "stream/consumers";
 
 export default function Home() {
 
-
     const [gamesArray, setGamesArray] = useState<any[]>([]);
-
+    
     const getGames = async () => {
         try {
             const res = await API.get('games');
@@ -28,11 +27,12 @@ export default function Home() {
             console.log(error);
         }
     };
-
+    
+    
     useEffect(() => {
         getGames();
-    }, []);
-
+      }, [getGames]);
+      
     return (
         <>
             <NavBar />
@@ -43,7 +43,7 @@ export default function Home() {
                 <div >
                         {gamesArray.length > 0 ? (
                             gamesArray.map((game, index) => (
-                                <div className="gap-10">
+                                <div key = {index}  className="gap-10">
                                     < GameList key = {index} game = {game}/>
                                 </div>
                             ))
