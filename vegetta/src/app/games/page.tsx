@@ -17,7 +17,6 @@ export default function Home() {
         try {
             const res = await API.get('games');
             //console.log(res);
-
             if (res.data.length > 0) {
                 // Almacenar los datos en el estado
                 setGamesArray(res.data);

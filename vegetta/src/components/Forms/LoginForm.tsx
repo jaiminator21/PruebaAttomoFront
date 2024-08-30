@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { FormEvent } from 'react'
-import { useRouter } from 'next/router'
 import { API } from '@/lib/services/api'
 import { JWT_DECODER } from '@/lib/services/jwtDecoder'
 import { useState } from "react";
-
+import { useRouter } from 'next/navigation';
 import { jwtDecode } from "jwt-decode";
 
 
@@ -24,8 +23,7 @@ import { Input } from "@/components/ui/input";
 
 export function SigninForm() {
 
-  
-
+  const router = useRouter()
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
@@ -40,7 +38,12 @@ console.log(e);
         console.log("error en el login");
         return false;
       }
+
+      
       localStorage.setItem('Token', response.data.token)
+      localStorage.setItem('Rol', response.data.user.role)
+
+      router.push('/games')
     });
   }
 
@@ -62,7 +65,7 @@ console.log(e);
                 id="email"
                 name="email"
                 type="text"
-                placeholder="email"
+                placeholder="admin@gmail.com"
               />
             </div>
             <div className="space-y-2">
@@ -71,7 +74,7 @@ console.log(e);
                 id="password"
                 name="password"
                 type="password"
-                placeholder="password"
+                placeholder="Ejemplo123!"
               />
             </div>
           </CardContent>
