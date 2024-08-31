@@ -8,26 +8,42 @@ import { API } from "@/lib/services/api";
 import { json } from "stream/consumers";
 
 
+type Game = {
+    name?: string;
+    genre?: string;
+    votes: number;
+    cover?: string;
+    comments: string[]; // O ajusta según tu esquema (por ejemplo, ObjectId)
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  
+
 export default function Home() {
 
     const [gamesArray, setGamesArray] = useState<any[]>([]);
     
-    const getGames = async () => {
-        try {
-            const res = await API.get('games');
-            //console.log(res);
-            if (res.data.length > 0) {
-                // Almacenar los datos en el estado
-                setGamesArray(res.data);
-                //console.log(gamesArray); // Esto puede mostrar el valor anterior debido a la asincronía del estado
-            } else {
-                console.log('array vacio');
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const sortItemsByVotes = (items: Game[]): Game[] => {
+        return items.sort((a, b) => b.votes - a.votes);
+      };
     
+      const getGames = async () => {
+        try {
+          const res = await API.get('games');
+          if (res.data.length > 0) {
+            // Ordenar los juegos por el número de votos antes de almacenarlos en el estado
+            const sortedGames = sortItemsByVotes(res.data);
+            setGamesArray(sortedGames);
+    
+            // Ahora gamesArray estará ordenado por votos de mayor a menor
+            console.log(gamesArray); // Aquí podrías ver el array ordenado
+          } else {
+            console.log('array vacio');
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
     
     useEffect(() => {
         getGames();
