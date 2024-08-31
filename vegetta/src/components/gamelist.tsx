@@ -32,6 +32,8 @@ import { useEffect, useState } from "react";
 import { validateHeaderName } from "http";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button"
+
+
 export function GameList({ game }: { game: any }) {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -54,13 +56,14 @@ export function GameList({ game }: { game: any }) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Respuesta:', res.data);
-    
+            console.log(res);
+            if (res.data.votes.length >5) {
+                console.log(res.data.length);
+                console.log("HOLA");
+                
+            }
             setIsAuthenticated(true);
             setVotesArray(res.data.votes);
-    
-
-/*             setVotesArray((updatedVotesArray) => {return updatedVotesArray;});*/
         } catch (error) {
             console.error('Error en la petición:', error);
             setIsAuthenticated(false);
@@ -73,11 +76,7 @@ export function GameList({ game }: { game: any }) {
     
         if (!votesArray.includes(gameId)) {
             console.log("Continuando con el proceso");
-    
-            // Actualización del estado con el nuevo array que incluye el nuevo gameId
             setVotesArray(prevVotesArray => [...prevVotesArray, gameId]);
-    
-            // Llamada a la función sendVote (suponiendo que esta función maneja el envío del voto)
             sendVote();
         } else {
             console.log(votesArray);
@@ -90,11 +89,11 @@ export function GameList({ game }: { game: any }) {
     const sendVote = () => {
         const newVote = game.votes + 1;
         const url = 'games/' + game._id;
-    
+        const token = localStorage.getItem('Token')
         try {
-            API.put(url, {
-                votes: newVote,
-            }).then((res) => {
+            API.put(url, {votes: newVote}, {
+            headers: { Authorization: `Bearer ${token}` },
+        }).then((res) => {
                 console.log("Voto enviado!", votesArray.length);
                 registerVote();
             });
@@ -130,7 +129,9 @@ export function GameList({ game }: { game: any }) {
   
           console.log("Payload enviado:", votesArray);
       
-          API.put(url, { votes: votesArray })
+          API.put(url, { votes: votesArray }, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
             .then((res) => {
               console.log("Respuesta de la API:", res);
             })

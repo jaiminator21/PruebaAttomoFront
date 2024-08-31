@@ -13,7 +13,7 @@ type Game = {
     genre?: string;
     votes: number;
     cover?: string;
-    comments: string[]; // O ajusta según tu esquema (por ejemplo, ObjectId)
+    comments: string[]; 
     createdAt: Date;
     updatedAt: Date;
   };
@@ -31,12 +31,9 @@ export default function Home() {
         try {
           const res = await API.get('games');
           if (res.data.length > 0) {
-            // Ordenar los juegos por el número de votos antes de almacenarlos en el estado
             const sortedGames = sortItemsByVotes(res.data);
             setGamesArray(sortedGames);
-    
-            // Ahora gamesArray estará ordenado por votos de mayor a menor
-            console.log(gamesArray); // Aquí podrías ver el array ordenado
+            console.log(gamesArray); 
           } else {
             console.log('array vacio');
           }
@@ -47,7 +44,7 @@ export default function Home() {
     
     useEffect(() => {
         getGames();
-      }, [getGames]);
+      }, []);
       
     return (
         <>
