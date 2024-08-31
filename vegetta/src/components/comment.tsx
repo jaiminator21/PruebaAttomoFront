@@ -4,14 +4,14 @@ import { CardTitle, CardHeader, CardContent, CardFooter, Card } from "@/componen
 
 
 
-export function CommentForm({ Comment, }: { Comment: any }) {
+export function CommentsBox({ Comment, }: { Comment: any }) {
    
 
     return (
         <div className="w-full max-w-md">
             
                 <Card>
-                   
+                    <CardTitle>{Comment.content}</CardTitle>
                 </Card>
 
         </div>

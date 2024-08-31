@@ -15,77 +15,82 @@ import {
 } from "@/components/ui/card";
 import { CommentForm } from "@/components/Forms/CommentsForm";
 import Comment from "postcss/lib/comment";
+import { CommentsBox } from "@/components/comment";
 
 
 
 export default function Game({ searchParams }: { searchParams: { gameid: string } }) {
 
-        const GameId: string = searchParams.gameid;
+    const GameId: string = searchParams.gameid;
 
-        const [game, setGame] = useState<any>({}); // Inicializar como null para manejar el estado de carga
+    const [game, setGame] = useState<any>({}); // Inicializar como null para manejar el estado de carga
+    const [comments, setComments] = useState([]);
+    const url: string = 'games/' + GameId;
 
-        const url: string = 'games/' + GameId;
-
-        const getGames = async () => {
-            try {
-                const res = await API.get(url);
-                console.log("respuesta", res.data.data);
-                setGame(res.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        useEffect(() => {
-            getGames();
-        }, []);
-
-        if (!game) {
-            return <p>Loading...</p>; // Mostrar un mensaje de carga mientras se obtiene la data
+    const getGames = async () => {
+        try {
+            const res = await API.get(url);
+            console.log("respuesta", res.data.data);
+            setGame(res.data.data);
+            setComments(res.data.data.comments);
+        } catch (error) {
+            console.log(error);
         }
+    };
 
-        return (
-            <>
-                <NavBar />
-                <main className="flex flex-col items-center  min-h-screen bg-gray-100 dark:bg-gray-900 gap-20">
-                    <div className="m-32" >
-                        <Card className="flex flex-row items-center justify-center  gap-10 p-5" >
+    useEffect(() => {
+        getGames();
+    }, []);
 
-                            <div className="flex flex-row items-center justify-center  gap-10 p-5">
-                                <Image
-                                    src={game.cover}
-                                    height={300}
-                                    width={300}
-                                    alt="Vegetta777 youtube logo"
-                                    priority />
+    if (!game) {
+        return <p>Loading...</p>; // Mostrar un mensaje de carga mientras se obtiene la data
+    }
 
+    return (
+        <>
+            <NavBar />
+            <main className="flex flex-col items-center  min-h-screen bg-gray-100 dark:bg-gray-900 gap-20">
+                <div className="m-32" >
+                    <Card className="flex flex-row items-center justify-center  gap-10 p-5" >
+
+                        <div className="flex flex-row items-center justify-center  gap-10 p-5">
+                            <Image
+                                src={game.cover}
+                                height={300}
+                                width={300}
+                                alt="Vegetta777 youtube logo"
+                                priority />
+
+                        </div>
+                        <div className="flex flex-col justify-center items-center gap-10" >
+                            <CardTitle className="text-3xl font-bold">{game.name}</CardTitle>
+                            <CardTitle className="text-3xl font-bold">{game.genre}</CardTitle>
+
+                            <span className="text-3xl font-bold">{game.votes} votos</span>
+                        </div>
+                        <p> </p>
+                    </Card>
+                </div >
+                <div className="flex flex-col">
+
+
+
+                    <CommentForm GameId={game._id} Game={game} ></CommentForm>
+
+
+                    <h2>Comments</h2>
+                    {comments.length > 0 ? (
+                        comments.map((comment, index) => (
+                            <div key={index} className="comment">
+                                <CommentsBox  Comment={comment}/>
                             </div>
-                            <div className="flex flex-col justify-center items-center gap-10" >
-                                <CardTitle className="text-3xl font-bold">{game.name}</CardTitle>
-                                <CardTitle className="text-3xl font-bold">{game.genre}</CardTitle>
-      
-                                <span className="text-3xl font-bold">{game.votes} votos</span>
-                            </div>
-                            <p> </p>
-                        </Card>
-                    </div >
-                    <div className="flex flex-col">
+                        ))
+                    ) : (
+                        <p>No comments available.</p>
+                    )}
+                </div>
 
-
-
-                            <CommentForm  GameId = {game._id} Game= {game} ></CommentForm>
-
-
-
-
-
-
-                
-
-
-                    </div>
-
-                </main >
+        </main >
             </>
         );
-    }
+}

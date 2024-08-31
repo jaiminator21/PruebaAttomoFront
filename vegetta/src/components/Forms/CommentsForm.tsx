@@ -49,6 +49,7 @@ export function CommentForm({ GameId, Game }: { GameId: string, Game: GameObject
                 headers: { Authorization: `Bearer ${token}` },
             });
             sessionStorage.setItem("UserId", res.data._id);
+            sessionStorage.setItem("UserId", res.data.name);
             setIsAuthenticated(true);
         } catch (error) {
             console.error('Error en la validación del token:', error);
@@ -67,13 +68,13 @@ export function CommentForm({ GameId, Game }: { GameId: string, Game: GameObject
         const content = (e.target as any)[0].value;
         const token = localStorage.getItem('Token');
         const userId = sessionStorage.getItem('UserId');
-
+        const name = sessionStorage.getItem('Name');
         if (!content || !token) return;
 
         try {
             const res = await API.post(
                 'comments/',
-                { content, gameId: GameId, userId },
+                { content, gameId: GameId, userId, name: name },
                 { headers: { Authorization: `Bearer ${token}` } }
             ).then((res) => {
                 console.log("comment response", res);
@@ -109,7 +110,6 @@ export function CommentForm({ GameId, Game }: { GameId: string, Game: GameObject
         const token = localStorage.getItem('Token');
         if (!token) return;
         console.log("Se envia", gameObject);
-
         try {
             // Realizamos la solicitud PUT para actualizar el objeto `gameObject` completo
             const res = await API.put(
